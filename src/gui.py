@@ -1,15 +1,24 @@
-from tokenize import String
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QWidget
+
+from PyQt5 import uic
+from PyQt5.QtWidgets import QWidget
+import sys
 
 import DatabaseHandler
 
-class gui(QWidget):
+class Start(QWidget):
     def __init__(self):
         super().__init__()
         self.dh = DatabaseHandler.DatabaseHandler()
-        uic.loadUi('Test.ui', self)
-        self.setWindowTitle('My App')
+        uic.loadUi('Start.ui', self)
+        self.setWindowTitle('Start')
+        self.Login.clicked.connect(self.show_new_window)
+
+class Login(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.dh = DatabaseHandler.DatabaseHandler()
+        uic.loadUi('Login.ui', self)
+        self.setWindowTitle('Login/register')
         self.Button.clicked.connect(self.createAccount)
         self.Button_2.clicked.connect(self.login)
 
