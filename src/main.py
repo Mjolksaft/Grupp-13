@@ -1,25 +1,20 @@
-from mimetypes import init
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QWidget
+"""
+Welcome to the project!.
+
+"""
+
+from PyQt5.QtWidgets import QApplication
 import sys
 
-class window(QWidget):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('Test.ui', self)
-        self.setWindowTitle('My App')
-        self.button.clicked.connect(self.sayHello)
-        
+import gui
 
-    def sayHello(self):
-        inputText = self.input.text()
-        self.output.setText('hello {0}'.format(inputText))
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app = QApplication(sys.argv) 
     
-    myApp = window()
+    myApp = gui.gui()
     myApp.show()
-
+    
     try:
         sys.exit(app.exec_())
     except SystemError as error:

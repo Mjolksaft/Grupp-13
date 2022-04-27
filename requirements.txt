@@ -4,6 +4,7 @@ cohesion
 flake8
 flake8-docstrings
 flake8-polyfill
+
 #metrics.pylint
 pylint
 radon
@@ -20,3 +21,6 @@ coverage
 
 # pyqt designer
 pyqt5
+
+# Database
+mysql-connector-python
