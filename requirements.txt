@@ -17,3 +17,6 @@ sphinx
 
 # Unit test and coverage
 coverage
+
+# pyqt designer
+pyqt5
