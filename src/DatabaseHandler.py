@@ -25,6 +25,7 @@ class DatabaseHandler():
                     VALUES
                         (%s, %s)
                 """
+
                 print(f"# The SQL is:\n{sql}")
 
                 args = (firstName, password)
@@ -37,7 +38,7 @@ class DatabaseHandler():
 
         except Error as err:
             print(err)
-    
+
     def login(self, userName, password):
         """Do example code."""
         try:
@@ -55,7 +56,7 @@ class DatabaseHandler():
                         userName = ?
                         AND password = ?
                 """
-                
+
                 args = (userName, password)
                 print(f"# The SQL is:\n{sql}")
                 print(f" the args are: {args}")

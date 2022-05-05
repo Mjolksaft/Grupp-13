@@ -1,6 +1,5 @@
 """
 Welcome to the project!.
-
 """
 
 from PyQt5 import uic, QtWidgets
@@ -16,7 +15,7 @@ class Start(QWidget):
         uic.loadUi('Start.ui', self)
         self.setWindowTitle('Start')
         self.Login.clicked.connect(self.login)
-    
+
     def login(self):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
@@ -32,19 +31,24 @@ class Login(QWidget):
 
     def Back(self):
         widget.setCurrentIndex(widget.currentIndex()-1)
-    
+
     def createAccount(self):
         """Allows the user to create a account with name and password."""
         userName = self.Username.text()
         password = self.Password.text()
         if userName != "" and password != "":
             self.dh.createAccount(userName, password)
+        else:
+            self.error.setText("input fields cannot be empty")
 
     def login(self):
         """Allows the user to login to a specific account."""
         userName = self.Username_2.text()
         password = self.Password_2.text()
-        self.dh.login(userName, password)
+        if userName != "" and password != "":
+            self.dh.login(userName, password)
+        else:
+            self.error.setText("input fields cannot be empty")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
@@ -57,7 +61,7 @@ if __name__ == "__main__":
     widget.setFixedHeight(500)
     widget.setFixedWidth(800)
     widget.show()
-    
+
     try:
         sys.exit(app.exec_())
     except SystemError as error:
