@@ -13,30 +13,42 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="Login">
+  <widget class="QTableWidget" name="Table">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>220</y>
-     <width>221</width>
-     <height>23</height>
+     <x>220</x>
+     <y>120</y>
+     <width>391</width>
+     <height>281</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Login</string>
-   </property>
+   <column>
+    <property name="text">
+     <string>subject</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>date</string>
+    </property>
+   </column>
   </widget>
-  <widget class="QPushButton" name="Exit">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>260</y>
-     <width>221</width>
-     <height>23</height>
+     <x>230</x>
+     <y>30</y>
+     <width>391</width>
+     <height>51</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>Exit</string>
+    <string>users schedule</string>
    </property>
   </widget>
  </widget>

@@ -46,18 +46,33 @@ class Login(QWidget):
         userName = self.Username_2.text()
         password = self.Password_2.text()
         if userName != "" and password != "":
-            self.dh.login(userName, password)
+            succes = self.dh.login(userName, password)
+            if succes == True:
+                print("succes")
+                widget.setCurrentIndex(2)
+            else:
+                print("failed")
         else:
             self.error.setText("input fields cannot be empty")
+
+class Home(QWidget):
+    """the home screen which holds the users schedule"""
+    def __init__(self):
+        super().__init__()
+        self.dh = DatabaseHandler.DatabaseHandler()
+        uic.loadUi('Home.ui', self)
+        self.setWindowTitle('Home')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
 
     startScreen = Start()
     loginScreen = Login()
+    homeScreen = Home()
     widget = QtWidgets.QStackedWidget()
     widget.addWidget(startScreen)
     widget.addWidget(loginScreen)
+    widget.addWidget(homeScreen)
     widget.setFixedHeight(500)
     widget.setFixedWidth(800)
     widget.show()
