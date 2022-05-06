@@ -5,8 +5,18 @@ Welcome to the project!.
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QWidget, QApplication
 import sys
+import os
+import hashlib
 
 import DatabaseHandler
+
+def sha256_hash_password(password, salt):
+    pepper = "(!/¤()!/¤(aoiidaipsmd)(!(¤=)!())jnaisjdniJANISNDiasnd"
+    return hashlib.sha256((password + pepper + salt).encode("utf-8")).hexdigest()
+
+def verify_password(password, salt, hashed_password):
+    pepper = "(!/¤()!/¤(aoiidaipsmd)(!(¤=)!())jnaisjdniJANISNDiasnd"
+    return sha256_hash_password(password, salt) == hashed_password
 
 class Start(QWidget):
     def __init__(self):
