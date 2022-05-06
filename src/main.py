@@ -60,11 +60,13 @@ class Login(QWidget):
         userName = self.Username_2.text()
         password = self.Password_2.text()
         if userName != "" and password != "":
-            widget.setCurrentIndex(widget.currentIndex()+1)
             # self.dh.login(userName, password)
-            if verify_password(password, self.dh.getSalt(userName), self.dh.getPassword(userName)):
-                widget.setCurrentIndex(widget.currentIndex()+1)
-            else:
+            try:
+                if verify_password(password, self.dh.getSalt(userName), self.dh.getPassword(userName)):
+                    widget.setCurrentIndex(widget.currentIndex()+1)
+                else:
+                    self.error.setText("Wrong username or password")
+            except:
                 self.error.setText("Wrong username or password")
         else:
             self.error.setText("input fields cannot be empty")
