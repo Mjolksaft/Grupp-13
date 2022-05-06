@@ -11,7 +11,29 @@ class DatabaseHandler():
             "raise_on_warnings": True,
         }
 
-    def createAccount(self, firstName, password):
+    def getPassword(self, userName):
+        """hämtar lösenord hashen från användarnamn"""
+        try:
+            with connect(**self.dsn) as cnx:
+                cursor = cnx.cursor()
+                cursor.execute("SELECT password FROM users WHERE username = %s", (userName,))
+                password = cursor.fetchone()[0]
+                return password
+        except Error as e:
+            print(e)
+
+    def getSalt(self, userName):
+        """Hämtar salt från användarnamn"""
+        try:
+            with connect(**self.dsn) as cnx:
+                cursor = cnx.cursor()
+                cursor.execute("SELECT salt FROM users WHERE username = %s", (userName,))
+                salt = cursor.fetchone()[0]
+                return salt
+        except Error as e:
+            print(e)
+
+    def createAccount(self, firstName, password, salt):
         """Creates a account to the database"""
         try:
             with connect(**self.dsn) as cnx:
@@ -21,14 +43,14 @@ class DatabaseHandler():
 
                 sql = """
                     INSERT INTO users
-                        (userName, password)
+                        (userName, password, salt)
                     VALUES
-                        (%s, %s)
+                        (%s, %s, %s)
                 """
 
                 print(f"# The SQL is:\n{sql}")
 
-                args = (firstName, password)
+                args = (firstName, password, salt)
                 print(f" the args are: {args}")
                 cursor.execute(sql, args)
 
@@ -74,3 +96,5 @@ class DatabaseHandler():
 
         except Error as err:
             print(err)
+
+    
