@@ -1,7 +1,9 @@
+from importlib_metadata import Prepared
 from mysql.connector import connect, Error
 
 class DatabaseHandler():
     def __init__(self):
+        self.currentUser = "none"
         self.dsn = {
             "user": "John",
             "password": "P@ssw0rd",
@@ -44,7 +46,8 @@ class DatabaseHandler():
                 # Execute the query
                 sql = """
                     SELECT
-                        password
+                        password,
+                        userId
                     FROM users
                     WHERE 
                         userName = ?
@@ -56,44 +59,58 @@ class DatabaseHandler():
                 # Fetch the resultset
                 res = cursor.fetchone()
                 if res[0] == password:
+                    self.currentUser = res[1]
                     return True
                 else:
                     return False
         except Error as err:
             print(err)
 
-    def getTable(self, userId):
-        """asd"""
+    def getTable(self):
+        """get the schedule data from the database"""
         try:
             with connect(**self.dsn) as cnx:
+
                 # Create a cursor object for prepared statements
                 cursor = cnx.cursor(prepared=True)
 
                 # Execute the query
                 sql = """
-                    SELECT
-                        subject,
-                        time
-                    FROM schema
-                    WHERE userId = ?
+                    SELECT subject, 
+                        time,
+                        users.userId
+                    FROM schedule 
+                    JOIN users 
+                    ON schedule.userID = users.userId
+                    WHERE users.userId = ?
+                    ORDER BY time;
                 """
-                
-                args = (userId,)
-                print(f"# The SQL is:\n{sql}")
-                print(f" the args are: {args}")
-                cursor.execute(sql,args)
+
+                args = (self.currentUser,)
+                cursor.execute(sql, args) # måste ha argument i en tuple eller en list så om du ska ha ett arugment gör (arg,)
 
                 # Fetch the resultset
                 res = cursor.fetchall()
-                print("\n# Printing out the resultset")
-                print(res)
+                return res
+        except Error as err:
+            print(err)
 
-                # print("{0:<5} {1:<20} {2:<20}".format(*cursor.column_names))
-                # print("-" * 60)
-                # for row in res:
-                #     print(f"{row[0]:<5} {row[1]:<20} {row[2]:<20}")
+    def addSubject(self, subject, time):
+        """add to the schedule"""
+        try:
+            with connect(**self.dsn) as cnx:
+                cursor = cnx.cursor(prepared = True)
+                
+                sql = """
+                    INSERT INTO schedule
+                        (userId, subject, time)
+                    values(?, ?, ?)
+                """
+                
+                args = (self.currentUser, subject, time)
+                cursor.execute(sql, args)
+                cnx.commit()
+                print(args+ "succesfully added to database")
 
         except Error as err:
             print(err)
-    
-
