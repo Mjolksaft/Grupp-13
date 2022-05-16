@@ -77,6 +77,7 @@ class Home(QWidget):
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
+                print(QtWidgets.QTableWidgetItem(str(res[row][column])))
                 
     def setData(self):
         """sets the data in the mysql database"""
