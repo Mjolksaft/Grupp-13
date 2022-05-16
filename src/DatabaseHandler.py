@@ -1,4 +1,3 @@
-from importlib_metadata import Prepared
 from mysql.connector import connect, Error
 
 class DatabaseHandler():
@@ -110,7 +109,7 @@ class DatabaseHandler():
                 args = (self.currentUser, subject, time)
                 cursor.execute(sql, args)
                 cnx.commit()
-                print(args+ "succesfully added to database")
+                # print(args+ "succesfully added to database")
 
         except Error as err:
             print(err)
