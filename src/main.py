@@ -38,8 +38,8 @@ class Login(QWidget):
         password = self.Password.text()
         if userName != "" and password != "":
             self.dh.createAccount(userName, password)
-            self.Subject.clear()
-            self.Time.clear()
+            self.Password.clear()
+            self.Username.clear()
         else:
             self.error.setText("input fields cannot be empty")
 
@@ -77,6 +77,7 @@ class Home(QWidget):
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
+                print(QtWidgets.QTableWidgetItem(str(res[row][column])))
                 
     def setData(self):
         """sets the data in the mysql database"""
