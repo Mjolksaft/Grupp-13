@@ -23,7 +23,7 @@ class DatabaseHandler():
                     INSERT INTO users
                         (userName, password)
                     VALUES
-                        (%s, %s)
+                        (?, ?)
                 """
 
                 args = (firstName, password)
@@ -94,7 +94,7 @@ class DatabaseHandler():
         except Error as err:
             print(err)
 
-    def addSubject(self, subject, time):
+    def addSubject(self, itemList):
         """add to the schedule"""
         try:
             with connect(**self.dsn) as cnx:
@@ -105,10 +105,28 @@ class DatabaseHandler():
                         (userId, subject, time)
                     values(?, ?, ?)
                 """
-                
-                args = (self.currentUser, subject, time)
+
+                args = (self.currentUser, itemList[0], itemList[1])
                 cursor.execute(sql, args)
                 cnx.commit()
 
+        except Error as err:
+            print(err)
+
+    def deleteContent(self):
+        """deletes content from the database"""
+        try:
+            with connect(**self.dsn) as cnx:
+                cursor = cnx.cursor(prepared = True)
+                
+                sql = """
+                DELETE FROM schedule 
+                WHERE userId = ?;
+                """
+
+                args = (self.currentUser, )
+                print(args)
+                cursor.execute(sql, args)
+                cnx.commit()
         except Error as err:
             print(err)

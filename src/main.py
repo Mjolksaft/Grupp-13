@@ -3,7 +3,7 @@ Welcome to the project!.
 """
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QTableWidget
+from PyQt5.QtWidgets import QWidget, QApplication
 import sys
 
 import DatabaseHandler
@@ -66,12 +66,13 @@ class Home(QWidget):
         self.Table.setColumnWidth(0,191)
         self.Table.setColumnWidth(1,191)
         self.setWindowTitle('Home')
-        self.BUTTON.clicked.connect(self.getTable)
+        self.BUTTON.clicked.connect(self.setTable)
         self.addContent.clicked.connect(self.setData)
         self.newRowButton.clicked.connect(self.newRow)
         self.deleteButton.clicked.connect(self.deleteRow)
+        self.saveButton.clicked.connect(self.save)
 
-    def getTable(self):
+    def setTable(self):
         """gets the table contet for the correct user"""
         res = self.dh.getTable()
         self.Table.setRowCount(len(res))
@@ -79,7 +80,12 @@ class Home(QWidget):
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
-                
+    
+    # def getTableContent(self, row, column):
+    #     """gets the data from the table"""
+    #     item = self.Table.item(0,0)
+    #     print(item.text)
+
     def setData(self):
         """sets the data in the mysql database"""
         subject = self.Subject.text()
@@ -98,11 +104,22 @@ class Home(QWidget):
         """deletes the row from the table"""
         if self.Table.rowCount() > 0:
             currentRow = self.Table.currentRow()
-            self.Table.removeRow(currentRow) # -1 för indexing
+            self.Table.removeRow(currentRow)
 
     def save(self):
         """saves to the database"""
-        
+        self.dh.deleteContent()
+        contentList = []
+        for row in range(self.Table.rowCount()):
+            rowList = []
+            for column in range(self.Table.columnCount()):
+                widgetItem = self.Table.item(row, column)
+                rowData = widgetItem.text()
+                rowList.append(rowData)
+            contentList.append(rowList)
+
+        for item in contentList:
+            self.dh.addSubject(item)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
