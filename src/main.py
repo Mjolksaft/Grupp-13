@@ -3,7 +3,7 @@ Welcome to the project!.
 """
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication, QDialog
+from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QTableWidget
 import sys
 
 import DatabaseHandler
@@ -63,12 +63,14 @@ class Home(QWidget):
         self.dh = dh
         super().__init__()
         uic.loadUi('Home.ui', self)
-        self.Table.setColumnWidth(0,199)
-        self.Table.setColumnWidth(1,199)
+        self.Table.setColumnWidth(0,191)
+        self.Table.setColumnWidth(1,191)
         self.setWindowTitle('Home')
         self.BUTTON.clicked.connect(self.getTable)
         self.addContent.clicked.connect(self.setData)
-        
+        self.newRowButton.clicked.connect(self.newRow)
+        self.deleteButton.clicked.connect(self.deleteRow)
+
     def getTable(self):
         """gets the table contet for the correct user"""
         res = self.dh.getTable()
@@ -77,7 +79,6 @@ class Home(QWidget):
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
-                print(QtWidgets.QTableWidgetItem(str(res[row][column])))
                 
     def setData(self):
         """sets the data in the mysql database"""
@@ -87,6 +88,20 @@ class Home(QWidget):
             self.dh.addSubject(subject, time)
             self.Subject.clear()
             self.Time.clear()
+    
+    def newRow(self):
+        """adds a new row to the table."""
+        currentRow = self.Table.currentRow()
+        self.Table.insertRow(currentRow+1)
+
+    def deleteRow(self):
+        """deletes the row from the table"""
+        if self.Table.rowCount() > 0:
+            currentRow = self.Table.currentRow()
+            self.Table.removeRow(currentRow) # -1 för indexing
+
+    def save(self):
+        """saves to the database"""
         
 
 if __name__ == "__main__":
