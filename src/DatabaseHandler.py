@@ -125,7 +125,6 @@ class DatabaseHandler():
                 """
 
                 args = (self.currentUser, )
-                print(args)
                 cursor.execute(sql, args)
                 cnx.commit()
         except Error as err:

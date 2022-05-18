@@ -76,15 +76,10 @@ class Home(QWidget):
         """gets the table contet for the correct user"""
         res = self.dh.getTable()
         self.Table.setRowCount(len(res))
-        print(res)
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
     
-    # def getTableContent(self, row, column):
-    #     """gets the data from the table"""
-    #     item = self.Table.item(0,0)
-    #     print(item.text)
 
     def setData(self):
         """sets the data in the mysql database"""
@@ -106,7 +101,7 @@ class Home(QWidget):
             currentRow = self.Table.currentRow()
             self.Table.removeRow(currentRow)
 
-    def save(self):
+    def save(self): # a bug appears if you leave a column empty !!!!!!!!!!!!!!!!!!!!!!!!!!!!
         """saves to the database"""
         self.dh.deleteContent()
         contentList = []
