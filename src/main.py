@@ -3,7 +3,7 @@ Welcome to the project!.
 """
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 import sys
 
 import DatabaseHandler
@@ -64,10 +64,10 @@ class Home(QWidget):
         super().__init__()
         uic.loadUi('Home.ui', self)
         self.Table.setColumnWidth(0,191)
-        self.Table.setColumnWidth(1,191)
+        self.Table.setColumnWidth(1,95)
+        self.Table.setColumnWidth(2,95)
         self.setWindowTitle('Home')
         self.BUTTON.clicked.connect(self.setTable)
-        self.addContent.clicked.connect(self.setData)
         self.newRowButton.clicked.connect(self.newRow)
         self.deleteButton.clicked.connect(self.deleteRow)
         self.saveButton.clicked.connect(self.save)
@@ -116,10 +116,18 @@ class Home(QWidget):
         for item in contentList:
             self.dh.addSubject(item)
 
+    def showPopup(self):
+        """displays popup when an event is coming up"""
+        msg = QMessageBox()
+        msg.setWindowTitle("Tutorial on PyQt5")
+        msg.setText("this is the main text!")
+        
+        x = msg.exec_()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
     dh = DatabaseHandler.DatabaseHandler()
-    
+
     startScreen = Start(dh)
     loginScreen = Login(dh)
     homeScreen = Home(dh)

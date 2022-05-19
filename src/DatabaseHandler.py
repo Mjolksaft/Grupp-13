@@ -77,6 +77,7 @@ class DatabaseHandler():
                 sql = """
                     SELECT subject, 
                         time,
+                        timeEnd,
                         users.userId
                     FROM schedule 
                     JOIN users 
@@ -102,11 +103,11 @@ class DatabaseHandler():
                 
                 sql = """
                     INSERT INTO schedule
-                        (userId, subject, time)
-                    values(?, ?, ?)
+                        (userId, subject, time, timeEnd)
+                    values(?, ?, ?, ?)
                 """
 
-                args = (self.currentUser, itemList[0], itemList[1])
+                args = (self.currentUser, itemList[0], itemList[1], itemList[2])
                 cursor.execute(sql, args)
                 cnx.commit()
 
@@ -118,7 +119,7 @@ class DatabaseHandler():
         try:
             with connect(**self.dsn) as cnx:
                 cursor = cnx.cursor(prepared = True)
-                
+
                 sql = """
                 DELETE FROM schedule 
                 WHERE userId = ?;
