@@ -130,3 +130,6 @@ class DatabaseHandler():
                 cnx.commit()
         except Error as err:
             print(err)
+    
+    def getData(self):
+        return 'Data_1'

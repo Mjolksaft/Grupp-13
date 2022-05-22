@@ -45,17 +45,16 @@ installed:
 #
 clean:
 	rm -f .coverage *.pyc
-	rm -rf __pycache__
+	rm -rf src/__pycache__
 	rm -rf htmlcov
 
 clean-doc:
 	rm -rf doc
 
-clean-src:
-	$(call FOREACH,clean)
-
-clean-all: clean clean-doc clean-src
+clean-venv:
 	rm -rf .venv
+
+clean-all: clean clean-doc
 
 
 # ---------------------------------------------------------
@@ -84,3 +83,27 @@ coverage:
 	coverage report -m
 
 test: lint coverage
+#----------------------------------------------------------
+# DOCUMENTATION 
+#
+.PHONY: pydoc
+pydoc:
+	@$(call MESSAGE,$@)
+	# This does not work on Windows installed Python
+	$(PYTHON) -m pydoc -w "$(PWD)"
+	install -d doc/pydoc
+	mv *.html doc/pydoc
+
+pdoc:
+	@$(call MESSAGE,$@)
+	pdoc --force --html --output-dir doc/api src/*.py
+
+pyreverse:
+	@$(call MESSAGE,$@)
+	install -d doc/uml
+	pyreverse src/*.py
+	dot -Tpng classes.dot -o doc/uml/classes.png
+	dot -Tpng packages.dot -o doc/uml/packages.png
+	rm -f classes.dot packages.dot
+
+doc: pdoc pyreverse #pydoc sphinx

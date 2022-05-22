@@ -15,7 +15,7 @@ to see what version you are running use
 
 Now you are ready to create a venv environment open git bash and use
 
-    python -m venv .venv 
+    make venv
 
 this will create a .venv folder in the repo 
 we will then want to activate the venv by using
@@ -24,7 +24,7 @@ we will then want to activate the venv by using
 
 now to install the required packages you use the following command in git bash
 
-    python -m pip install -r requirements.txt
+    make install
 
 to check all the packages you isntalled use 
 
@@ -35,12 +35,6 @@ or
 when you are done with the venv use
 
     deactivate
-
-when you have succesfully donwloaded everything you can now play the game 
-to play the game open use any type of command prompt like git bash 
-and use the command when in the correct dir
-
-    python main.py 
 
 ============================================================
 Generate documentation
