@@ -46,6 +46,7 @@ installed:
 clean:
 	rm -f .coverage *.pyc
 	rm -rf src/__pycache__
+	rm -rf tests/__pycache__
 	rm -rf htmlcov
 
 clean-doc:
@@ -78,7 +79,7 @@ unittest:
 
 coverage:
 	@$(call MESSAGE,$@)
-	coverage run -m unittest discover src
+	coverage run -m unittest discover tests
 	coverage html
 	coverage report -m
 
