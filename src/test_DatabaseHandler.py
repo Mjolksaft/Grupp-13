@@ -9,6 +9,8 @@ class TestDatabaseHandler(unittest.TestCase):
 
     def test_Init(self):
         """test the init class"""
+        dh = DatabaseHandler.DatabaseHandler()
+        self.assertEqual(dh.currentUser, 'none')
     
     def test_createAccount(self):
         """test so that the user doesnt already exist"""
@@ -27,7 +29,7 @@ class TestDatabaseHandler(unittest.TestCase):
     def test_getTable(self):
         """test the getTable function"""
         dh = DatabaseHandler.DatabaseHandler()
-        dh.currentUser = 17
+        dh.currentUser = 109
         itemList = ['test', "10:10:10", "10:10:10"]
         dh.addSubject(itemList)
         """checks so that the correct data gets sent in the correct order"""
