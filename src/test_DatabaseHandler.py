@@ -37,7 +37,7 @@ class TestDatabaseHandler(unittest.TestCase):
     def test_getTable(self):
         """test the getTable function"""
         dh = DatabaseHandler.DatabaseHandler()
-        dh.currentUser = 109
+        dh.currentUser = 1
         itemList = ['test', "10:10:10", "10:10:10"]
         dh.addSubject(itemList)
         """checks so that the correct data gets sent in the correct order"""
