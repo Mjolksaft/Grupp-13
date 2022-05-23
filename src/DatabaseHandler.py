@@ -1,4 +1,10 @@
 from mysql.connector import connect, Error
+import hashlib
+
+def hashPassword(password):
+    """hashes the password"""
+    hashedPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    return hashedPassword
 
 class DatabaseHandler():
     def __init__(self):
@@ -26,7 +32,7 @@ class DatabaseHandler():
                     (?, ?)
             """
 
-            args = (firstName, password)
+            args = (firstName, hashPassword(password))
             cursor.execute(sql, args)
 
             cnx.commit()
@@ -60,7 +66,7 @@ class DatabaseHandler():
 
             if res == None:
                 return False
-            elif res[0] == password:
+            elif res[0] == hashPassword(password):
                 self.currentUser = res[1]
                 return True
             else:

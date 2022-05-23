@@ -24,3 +24,6 @@ pyqt5
 
 # Database
 mysql-connector-python
+
+# hashlib
+hashlib
