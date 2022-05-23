@@ -1,10 +1,6 @@
 from mysql.connector import connect, Error
 import hashlib
 
-def hashPassword(password):
-    """hashes the password"""
-    hashedPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-    return hashedPassword
 
 class DatabaseHandler():
     def __init__(self):
@@ -17,6 +13,11 @@ class DatabaseHandler():
             "database": "grupp13",
             "raise_on_warnings": True,
         }
+
+    def hashPassword(self, password):
+        """hashes the password"""
+        hashedPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        return hashedPassword
 
     def createAccount(self, firstName, password):
         """Creates a account to the database"""
@@ -32,7 +33,7 @@ class DatabaseHandler():
                     (?, ?)
             """
 
-            args = (firstName, hashPassword(password))
+            args = (firstName, self.hashPassword(password))
             cursor.execute(sql, args)
 
             cnx.commit()
@@ -66,7 +67,7 @@ class DatabaseHandler():
 
             if res == None:
                 return False
-            elif res[0] == hashPassword(password):
+            elif res[0] == self.hashPassword(password):
                 self.currentUser = res[1]
                 return True
             else:

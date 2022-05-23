@@ -12,6 +12,14 @@ class TestDatabaseHandler(unittest.TestCase):
         dh = DatabaseHandler.DatabaseHandler()
         self.assertEqual(dh.currentUser, 'none')
     
+    def test_hashPassword(self):
+        """"""
+        dh = DatabaseHandler.DatabaseHandler()
+        dh.hashPassword("password")
+        password = dh.hashPassword("password")
+        self.assertNotEqual(password, "password")
+        self.assertEqual(password, dh.hashPassword("password"))
+
     def test_createAccount(self):
         """test so that the user doesnt already exist"""
         dh = DatabaseHandler.DatabaseHandler()
