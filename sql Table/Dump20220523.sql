@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `userId` int NOT NULL AUTO_INCREMENT,
   `userName` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(255) NOT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `userName_UNIQUE` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
