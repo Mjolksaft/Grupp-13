@@ -1,7 +1,6 @@
 from mysql.connector import connect, Error
 import hashlib
 
-
 class DatabaseHandler():
     def __init__(self):
         self.currentUser = "none"
