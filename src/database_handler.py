@@ -1,9 +1,17 @@
-from mysql.connector import connect, Error
+"""
+Welcome to the Database Handler.
+
+"""
 import hashlib
 
+from mysql.connector import connect, Error
+
+
+
 class DatabaseHandler():
+    """Handles the data from the database MySql. """
     def __init__(self):
-        self.currentUser = "none"
+        self.current_user = "none"
         self.dsn = {
             "user": "John",
             "password": "P@ssw0rd",
@@ -13,35 +21,34 @@ class DatabaseHandler():
             "raise_on_warnings": True,
         }
 
-    def hashPassword(self, password):
-        """hashes the password"""
-        hashedPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        return hashedPassword
+    def hash_password(self, password):
+        """Hashes the password."""
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        return hashed_password
 
-    def createAccount(self, firstName, password):
+    def create_account(self, first_name, password):
         """Creates a account to the database"""
-        # try:
-        with connect(**self.dsn) as cnx:
-            # Create a cursor object for prepared statements
-            cursor = cnx.cursor(prepared=True)
+        try:
+            with connect(**self.dsn) as cnx:
+                # Create a cursor object for prepared statements
+                cursor = cnx.cursor(prepared=True)
 
-            sql = """
-                INSERT INTO users
-                    (userName, password)
-                VALUES
-                    (?, ?)
-            """
+                sql = """
+                    INSERT INTO users
+                        (userName, password)
+                    VALUES
+                        (?, ?)
+                """
 
-            args = (firstName, self.hashPassword(password))
-            cursor.execute(sql, args)
+                args = (first_name, self.hash_password(password))
+                cursor.execute(sql, args)
 
-            cnx.commit()
+                cnx.commit()
 
-        # except Error as err:
-        #     print(err)
-        #     pass
+        except (Error) as err:
+            print(err)
 
-    def login(self, userName, password):
+    def login(self, user_name, password):
         """Do example code."""
         with connect(**self.dsn) as cnx:
 
@@ -58,21 +65,20 @@ class DatabaseHandler():
                     userName = ?
             """
 
-            args = (userName,)
-            cursor.execute(sql, args) # måste ha argument i en tuple eller en list så om du ska ha ett arugment gör (arg,)
+            args = (user_name,)
+            cursor.execute(sql, args)
 
             # Fetch the resultset
             res = cursor.fetchone()
 
-            if res == None:
+            if res is None:
                 return False
-            elif res[0] == self.hashPassword(password):
-                self.currentUser = res[1]
+            if res[0] == self.hash_password(password):
+                self.current_user = res[1]
                 return True
-            else:
-                return False
+            return False
 
-    def getTable(self):
+    def get_table(self):
         """get the schedule data from the database"""
         with connect(**self.dsn) as cnx:
 
@@ -92,43 +98,43 @@ class DatabaseHandler():
                 ORDER BY time;
             """
 
-            args = (self.currentUser,)
-            cursor.execute(sql, args) # måste ha argument i en tuple eller en list så om du ska ha ett arugment gör (arg,)
+            args = (self.current_user,)
+            cursor.execute(sql, args)
 
             # Fetch the resultset
             res = cursor.fetchall()
             return res
 
-    def addSubject(self, itemList):
+    def add_subject(self, item_list):
         """add to the schedule"""
         try:
             with connect(**self.dsn) as cnx:
                 cursor = cnx.cursor(prepared = True)
-                
+
                 sql = """
                     INSERT INTO schedule
                         (userId, subject, time, timeEnd)
                     values(?, ?, ?, ?)
                 """
 
-                args = (self.currentUser, itemList[0], itemList[1], itemList[2])
+                args = (self.current_user, item_list[0], item_list[1], item_list[2])
                 cursor.execute(sql, args)
                 cnx.commit()
         except Exception as err:
             print(err)
 
-    def deleteContent(self):
+    def delete_content(self):
         """deletes content from the database"""
         try:
             with connect(**self.dsn) as cnx:
                 cursor = cnx.cursor(prepared = True)
 
                 sql = """
-                DELETE FROM schedule 
+                DELETE FROM schedule
                 WHERE userId = ?;
                 """
 
-                args = (self.currentUser, )
+                args = (self.current_user, )
                 cursor.execute(sql, args)
                 cnx.commit()
         except Error as err:

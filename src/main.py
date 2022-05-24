@@ -6,7 +6,7 @@ from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 import sys
 
-import DatabaseHandler
+import database_handler
 
 class Start(QWidget):
     def __init__(self, dh):
@@ -37,7 +37,7 @@ class Login(QWidget):
         userName = self.Username.text()
         password = self.Password.text()
         if userName != "" and password != "":
-            self.dh.createAccount(userName, password)
+            self.dh.create_account(userName, password)
             self.Password.clear()
             self.Username.clear()
         else:
@@ -74,22 +74,22 @@ class Home(QWidget):
 
     def setTable(self):
         """gets the table contet for the correct user"""
-        res = self.dh.getTable()
+        res = self.dh.get_table()
         self.Table.setRowCount(len(res))
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
-    
+
 
     def setData(self):
         """sets the data in the mysql database"""
         subject = self.Subject.text()
         time = self.Time.text()
         if subject != "" and time != "":
-            self.dh.addSubject(subject, time)
+            self.dh.add_subject(subject, time)
             self.Subject.clear()
             self.Time.clear()
-    
+
     def newRow(self):
         """adds a new row to the table."""
         currentRow = self.Table.currentRow()
@@ -101,9 +101,9 @@ class Home(QWidget):
             currentRow = self.Table.currentRow()
             self.Table.removeRow(currentRow)
 
-    def save(self): # a bug appears if you leave a column empty !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def save(self):
         """saves to the database"""
-        self.dh.deleteContent()
+        self.dh.delete_content()
         contentList = []
         for row in range(self.Table.rowCount()):
             rowList = []
@@ -114,19 +114,19 @@ class Home(QWidget):
             contentList.append(rowList)
 
         for item in contentList:
-            self.dh.addSubject(item)
+            self.dh.add_subject(item)
 
     def showPopup(self):
         """displays popup when an event is coming up"""
         msg = QMessageBox()
         msg.setWindowTitle("Tutorial on PyQt5")
         msg.setText("this is the main text!")
-        
+
         x = msg.exec_()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv) 
-    dh = DatabaseHandler.DatabaseHandler()
+    app = QApplication(sys.argv)
+    dh = database_handler.DatabaseHandler()
 
     startScreen = Start(dh)
     loginScreen = Login(dh)

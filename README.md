@@ -2,6 +2,8 @@
 ===============================================================
 Getting Started:
 ================================================================
+Import the Dump file in to the mysql workbench before starting the program or any testing.
+
 to use this program you will need to make an virtual enviorment
 in the repo directory and download all the essential packages. 
 to make a virtual enviorment you need to install chocolatey https://chocolatey.org/install
