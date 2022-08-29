@@ -78,7 +78,7 @@ class DatabaseHandler():
                 return True
             return False
 
-    def get_table(self):
+    def get_table(self, spinBoxValue):
         """get the schedule data from the database"""
         with connect(**self.dsn) as cnx:
 
@@ -94,18 +94,18 @@ class DatabaseHandler():
                 FROM schedule 
                 JOIN users 
                 ON schedule.userID = users.userId
-                WHERE users.userId = ?
+                WHERE users.userId = ? AND template = ?
                 ORDER BY time;
             """
 
-            args = (self.current_user,)
+            args = (self.current_user, spinBoxValue, )
             cursor.execute(sql, args)
 
             # Fetch the resultset
             res = cursor.fetchall()
             return res
 
-    def add_subject(self, item_list):
+    def add_subject(self, item_list, scheduleId):
         """add to the schedule"""
         try:
             with connect(**self.dsn) as cnx:
@@ -113,17 +113,17 @@ class DatabaseHandler():
 
                 sql = """
                     INSERT INTO schedule
-                        (userId, subject, time, timeEnd)
-                    values(?, ?, ?, ?)
+                        (template, userId, subject, time, timeEnd)
+                    values(?, ?, ?, ?, ?)
                 """
 
-                args = (self.current_user, item_list[0], item_list[1], item_list[2])
+                args = (scheduleId, self.current_user, item_list[0], item_list[1], item_list[2])
                 cursor.execute(sql, args)
                 cnx.commit()
         except Exception as err:
             print(err)
 
-    def delete_content(self):
+    def delete_content(self, template):
         """deletes content from the database"""
         try:
             with connect(**self.dsn) as cnx:
@@ -131,10 +131,10 @@ class DatabaseHandler():
 
                 sql = """
                 DELETE FROM schedule
-                WHERE userId = ?;
+                WHERE userId = ? AND template = ?;
                 """
 
-                args = (self.current_user, )
+                args = (self.current_user, template, )
                 cursor.execute(sql, args)
                 cnx.commit()
         except Error as err:

@@ -62,7 +62,7 @@ How to run the liners
 ============================================================
 to use the linters use the command
 
-    make lint 
+    make lint
 
 this will use flake 8 and pylint
 

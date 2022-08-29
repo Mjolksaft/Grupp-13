@@ -56,19 +56,6 @@
     <string>users schedule</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="BUTTON">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>440</y>
-     <width>91</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Get My Schedule</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
@@ -97,6 +84,58 @@
      <widget class="QPushButton" name="saveButton">
       <property name="text">
        <string>Save</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>230</y>
+     <width>160</width>
+     <height>83</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="changeForm_2">
+    <item>
+     <widget class="QPushButton" name="Template1">
+      <property name="text">
+       <string>School</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="Template2">
+      <property name="text">
+       <string>Work</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>430</y>
+     <width>133</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="getForm">
+    <item>
+     <widget class="QSpinBox" name="spinBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="BUTTON">
+      <property name="text">
+       <string>Get My Schedule</string>
       </property>
      </widget>
     </item>

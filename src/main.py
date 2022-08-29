@@ -2,6 +2,7 @@
 Welcome to the project!.
 """
 
+import datetime
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 import sys
@@ -41,7 +42,7 @@ class Login(QWidget):
             self.Password.clear()
             self.Username.clear()
         else:
-            self.error.setText("input fields cannot be empty")
+            self.showPopup("input fields cannot be empty")
 
     def login(self):
         """Allows the user to login to a specific account."""
@@ -55,7 +56,15 @@ class Login(QWidget):
             else:
                 print("failed")
         else:
-            self.error.setText("input fields cannot be empty")
+            self.showPopup("input fields cannot be empty")
+    
+    def showPopup(self, msg):
+        """displays popup when an event is coming up"""
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Warning")
+        msgBox.setText(msg)
+
+        x = msgBox.exec_()
 
 class Home(QWidget):
     """the home screen which holds the users schedule"""
@@ -63,23 +72,50 @@ class Home(QWidget):
         self.dh = dh
         super().__init__()
         uic.loadUi('Home.ui', self)
+        self.selectedSchedule = 0;
         self.Table.setColumnWidth(0,191)
         self.Table.setColumnWidth(1,95)
         self.Table.setColumnWidth(2,95)
         self.setWindowTitle('Home')
-        self.BUTTON.clicked.connect(self.setTable)
+        self.BUTTON.clicked.connect(self.getRes)
         self.newRowButton.clicked.connect(self.newRow)
         self.deleteButton.clicked.connect(self.deleteRow)
         self.saveButton.clicked.connect(self.save)
+        self.Template1.clicked.connect(self.setTemplate1)
+        self.Template2.clicked.connect(self.setTemplate2)
 
-    def setTable(self):
-        """gets the table contet for the correct user"""
-        res = self.dh.get_table()
+    def setTemplate1(self,):
+        """sets the table with template 1"""
+        res = [('go To School', datetime.timedelta(seconds=28800), datetime.timedelta(seconds=43200), 1), 
+               ('Eat', datetime.timedelta(seconds=43200), datetime.timedelta(seconds=46800), 1), 
+               ('Go to second Class', datetime.timedelta(seconds=46800), datetime.timedelta(seconds=54000), 1), 
+               ('homework', datetime.timedelta(seconds=54000), datetime.timedelta(seconds=64800), 1)]
+        self.setTable(res)
+        
+    def setTemplate2(self,):
+        """sets the table with template 1"""
+        res = [('Wake up!', datetime.timedelta(seconds=2), datetime.timedelta(seconds=2), 1), 
+               ('drive to work', datetime.timedelta(seconds=25200), datetime.timedelta(seconds=28800), 1), 
+               ('Work', datetime.timedelta(seconds=28800), datetime.timedelta(seconds=43200), 1), 
+               ('Lunch', datetime.timedelta(seconds=43200), datetime.timedelta(seconds=46800), 1), 
+               ('work!', datetime.timedelta(seconds=46800), datetime.timedelta(seconds=57600), 1), 
+               ('Drive Home', datetime.timedelta(seconds=57600), datetime.timedelta(seconds=61200), 1)]
+        self.setTable(res)
+        
+    def getRes(self):
+        """hämtar table content från databasen"""
+        value = self.spinBox.value()
+        res = self.dh.get_table(value)
+        print(res)
+        self.setTable(res)
+        self.selectedSchedule = value
+
+    def setTable(self, res):
+        """skriver ut allting i Table"""
         self.Table.setRowCount(len(res))
         for row in range(self.Table.rowCount()):
             for column in range(self.Table.columnCount()):
                 self.Table.setItem(row, column, QtWidgets.QTableWidgetItem(str(res[row][column])))
-
 
     def setData(self):
         """sets the data in the mysql database"""
@@ -103,7 +139,8 @@ class Home(QWidget):
 
     def save(self):
         """saves to the database"""
-        self.dh.delete_content()
+        
+        self.dh.delete_content(self.selectedSchedule)
         contentList = []
         for row in range(self.Table.rowCount()):
             rowList = []
@@ -114,15 +151,7 @@ class Home(QWidget):
             contentList.append(rowList)
 
         for item in contentList:
-            self.dh.add_subject(item)
-
-    def showPopup(self):
-        """displays popup when an event is coming up"""
-        msg = QMessageBox()
-        msg.setWindowTitle("Tutorial on PyQt5")
-        msg.setText("this is the main text!")
-
-        x = msg.exec_()
+            self.dh.add_subject(item, self.selectedSchedule)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
