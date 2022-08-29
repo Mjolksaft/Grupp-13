@@ -106,7 +106,6 @@ class Home(QWidget):
         """hämtar table content från databasen"""
         value = self.spinBox.value()
         res = self.dh.get_table(value)
-        print(res)
         self.setTable(res)
         self.selectedSchedule = value
 
